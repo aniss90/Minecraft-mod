@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="stylesheet" href="../style/main.css">
+    <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
+    
+    <style>
+        @font-face {
+            font-family: minecraft;
+            src: url('../font/Minecraft-Default.otf');
+        }
+        @font-face {
+            font-family: minecraft-ten;
+            src: url('../font/Minecraft-Ten.ttf');
+        }
+        @font-face {
+            font-family: minecraft-five;
+            src: url('../font/Minecraft-Five.ttf');
+        }
+          } 
+        }
+    </style>
+  <title>صفحة النقاط</title>
+  <style>
+    .points-box .points img {
+      height: 50px;
+      margin-left: 15px;
+    }
+    #points{
+      color: #FFBC13; 
+      font-size: 15px; 
+    }  
+    #welcomeMessage{
+      color: #FFFFFF; 
+      font-size: 15px; 
+      font-family: minecraft-five; 
+    } 
+    #othersPoints {
+  margin-top: 20px; 
+  color:#FFFFFF;
+    } 
+    #sendPointsResult {
+  margin-top: 10px;
+  color: #008000; /* أخضر لتحديد النجاح */
+  font-weight: bold;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="header"> 
+  My coins 
+  <div class="description">
+   <h1 id="welcomeMessage"></h1>
+          <div class="points">
+    <div class="title"> my coins : <span id="points">0</span><img src="../imag/MCoin.png" alt="عملة" height="15">
+    <div> 
+<div class="description"> 
+    <button id="greenButton"> Get coins <img src="../imag/purtle.png" height="15"></button>
+    </div> 
+<div class="description">  
+<div class="title"> Pay coins 
+<div> 
+<div class="button">
+    <button id="whiteButton">Send <img src="../imag/promo_holiday_gift_small.png" height="15"> </button>
+    </div> 
+    <div class="Pay">
+    <br>
+  <input type="text" id="receiverUsername" name="username" placeholder="username " required></br> 
+  <br>
+  <input type="number" id="sendPointsAmount" name="points" placeholder="coins" required>
+  </br>
+</div> 
+  <div id="sendPointsResult">
+</div> 
+<div  class="description">
+  <div class="title"> User coins
+  </div> see how much have other users coins.
+  <div class="button"> 
+<button id="viewOthersPoints">Show <img src="../imag/friends@0.5x.icon-23e24.png"</button></div> 
+<div class="show"> 
+<div  id="othersPoints"></div>
+</div> 
+<hr>
+<div class="description"> 
+    <button id="redButton"> Sign out</button>
+<hr>
+    </div> 
+    
+  </div>
+
+  <script>
+    const activeUser = localStorage.getItem('activeUser');
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+
+    if (!activeUser || !users[activeUser]) {
+      alert('  please login ferst!');
+      window.location.href = 'login.html';
+    } else {
+      const user = users[activeUser];
+      document.getElementById('welcomeMessage').innerText = `HELLO ${activeUser}!`;
+      document.getElementById('points').innerText = user.points;
+    }
+
+    document.getElementById('greenButton').addEventListener('click', function () {
+      users[activeUser].points++;
+      localStorage.setItem('users', JSON.stringify(users));
+      document.getElementById('points').innerText = users[activeUser].points;
+    });
+    
+    document.getElementById('redButton').addEventListener('click', function () {
+      localStorage.removeItem('activeUser');
+      window.location.href = 'login.html';
+    });
+    
+    document.getElementById('viewOthersPoints').addEventListener('click', function () {
+  const users = JSON.parse(localStorage.getItem('users'));
+  const othersPointsHtml = Object.keys(users).filter(username => username !== activeUser).map(username => {
+    return `<p>${username}: ${users[username].points} coins</p>`;
+  }).join('');
+  document.getElementById('othersPoints').innerHTML = othersPointsHtml;
+}); 
+
+document.getElementById('whiteButton').addEventListener('click', function () {
+  const sender = activeUser;
+  const receiver = document.getElementById('receiverUsername').value.trim();
+  const points = parseInt(document.getElementById('sendPointsAmount').value);
+
+  const users = JSON.parse(localStorage.getItem('users'));
+
+  if (!receiver || !users[receiver]) {
+    document.getElementById('sendPointsResult').innerText = 'User not found !';
+    return;
+  }
+
+  if (points <= 0 || users[sender].points < points) {
+    document.getElementById('sendPointsResult').innerText = 'عدد النقاط غير كافٍ!';
+    return;
+  }
+
+  users[sender].points -= points;
+  users[receiver].points = (users[receiver].points || 0) + points;
+
+  localStorage.setItem('users', JSON.stringify(users));
+  document.getElementById('points').innerText = users[sender].points;
+  document.getElementById('sendPointsResult').innerText = 'تم إرسال النقاط بنجاح!';
+});
+  </script>
+</body>
+</html>

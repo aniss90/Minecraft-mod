@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #6d5dfc, #00d2ff);
+      animation: gradientBG 6s infinite alternate;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .login-box {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 400px;
+      text-align: center;
+      width: 100%;
+    }
+    .login-box h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #CCCCCC;
+      border-radius: 5px;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      background: #6d5dfc;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .login-box button:hover {
+      background: #00d2ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>تسجيل الدخول</h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="اسم المستخدم" required>
+      <input type="password" id="password" placeholder="كلمة المرور" required>
+      <button type="submit">تسجيل الدخول</button>
+      <button type="button" id="createAccount">إنشاء حساب جديد</button>
+    </form>
+  </div>
+
+  <script>
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        alert('يرجى ملء جميع الحقول');
+        return;
+      }
+
+      if (users[username] && users[username].password === password) {
+        alert(`مرحبًا بعودتك ${username}!`);
+        localStorage.setItem('activeUser', username);
+        window.location.href = 'points.html';
+      } else {
+        alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+      }
+    });
+
+    document.getElementById('createAccount').addEventListener('click', function () {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        alert('يرجى ملء جميع الحقول لإنشاء الحساب');
+        return;
+      }
+
+      if (users[username]) {
+        alert('اسم المستخدم موجود بالفعل');
+        return;
+      }
+
+      users[username] = { password, points: 0 };
+      localStorage.setItem('users', JSON.stringify(users));
+      alert(`تم إنشاء الحساب بنجاح! مرحبًا ${username}.`);
+    });
+  </script>
+</body>
+</html>
