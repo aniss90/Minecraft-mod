@@ -120,14 +120,6 @@ div.content {
   border-bottom: 2px solid #383838;
 }
 
-input {
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-    height: 35px;
-    opacity: 0
-}
-
 
 div.description {
    margin-top: 5px;
@@ -205,11 +197,49 @@ a.link:hover {
   margin: auto;
   border: 2px solid #000000;
 }
+.borderpic{
+  margin:auto; 
+  border: 2px solid #FF0000;
+} 
 
 .button:hover {
   margin: auto;
   border: 2px solid #00000000;
 }
+.search {
+  font-family: minecraft-five; 
+  font-style: 10px; 
+  background-color: #303233; 
+  border: 2px solid #1e1e1f;
+  border-bottom: 2px solid #242424;
+  display: block;
+  margin: auto; 
+  width: 400px;
+  color: #FFFFFF;
+
+} 
+  .login-box input {
+  width: 50%;
+  padding: 10px;
+  margin: auto;
+  border: 2px solid #303233;
+  box-shadow: 0px 3px 0px rgba(60, 60, 60, 1); 
+  background: #1e1e1f;
+  text-align: center;
+  color: #FFFFFF;
+  }
+  .Pay input {
+  width: 50%;
+  padding: 10px;
+  margin: auto;
+  border: 2px solid #303233;
+  box-shadow: 0px 3px 0px rgba(60, 60, 60, 1); 
+  background: #1e1e1f;
+  text-align: center;
+  color: #FFFFFF;
+  }
+  
+
 
 
 #whiteButton:hover {
@@ -227,7 +257,7 @@ a.link:hover {
   border: 2px solid #3D3D3D;
   border: 2px solid #DCDCDC;
   background-color: #FFFFFF;
-  box-shadow: 0px 3px 0px rgba(16,59,11,1);
+  box-shadow: 0px 3px 0px rgba(111, 111, 111, 1);
   font-size: 16px;
   cursor: pointer;
   position: relative;
@@ -244,15 +274,14 @@ a.link:hover {
     position: relative;
 }
 
-#greenButton {
+#greenButton  {
   text-shadow: 1px 1px 0.9px #000000;
-  background-color: #19770E;
+  background-color: #2C8014;
   color: #FFFFFF;
   height: 40px;
   width: 100%; 
-  background-color: #19770E;
-  border: 2px solid #15821B;
-  box-shadow: 0px 3px 0px rgba(16,59,11,1);
+  border: 2px solid #4f913c;
+  box-shadow: 0px 3px 0px #1d4d13;
   font-size: 16px;
   cursor: pointer;
   position: relative;
@@ -314,20 +343,44 @@ a.link:hover {
  #loginbutton:hover {
    height: 30px; 
    width: 35px; 
+   top: 2px; 
    background-color: #14520D; 
+   position:relative; 
  }  
 
 #loginbutton{
 height: 30px;
 width: 35px;  
-border: 2px solid #000000; 
-border: 2px solid #15821B;
-background-color: #19770E; 
-box-shadow: 0px 3px 0px rgba(16,59,11,1); 
-display: inline-flex;
+border: 2px solid #4f913c; 
+background-color: #3c8527; 
+box-shadow: 0px 3px 0px #1d4d13;  
+display: inline-block;
 text-shadow: 1px 1px 0.5px #FFFFFF; 
 position: relative;
-left: 100px;
-top: 0px
+left: 140px;
+top:-1px; 
+margin: auto; 
+color: #FFFFFF;
 } 
-
+#viewOthersPoints:hover { 
+    background-color: #14520D;
+    top: 2px;
+    height: 40px;
+    width: 100%;
+    position: relative;
+}
+#viewOthersPoints{
+  text-shadow: 1px 1px 0.9px #000000;
+  background-color: #2C8014;
+  color: #FFFFFF;
+  height: 40px;
+  width: 100%; 
+  border: 2px solid #4f913c;
+  box-shadow: 0px 3px 0px #1d4d13;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  margin:auto;
+}
