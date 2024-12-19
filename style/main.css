@@ -356,10 +356,7 @@ background-color: #3c8527;
 box-shadow: 0px 3px 0px #1d4d13;  
 display: inline-block;
 text-shadow: 1px 1px 0.5px #FFFFFF; 
-position: relative;
-left: 140px;
-top:-1px; 
-margin: auto; 
+margin-left: auto; 
 color: #FFFFFF;
 } 
 #viewOthersPoints:hover { 
@@ -383,4 +380,8 @@ color: #FFFFFF;
   display: inline-block;
   padding: 10px;
   margin:auto;
+}
+#othersPoints {
+  margin-top: 20px; 
+  color: #FFFFFF; /* اللون الأبيض */
 }
