@@ -48,48 +48,67 @@
      <img src="../imag/parental-online-safety-8fad2.png">
     </form>
   </div>
-  <script>
-    const users = JSON.parse(localStorage.getItem('users')) || {};
+<script type="module">
+  import { db } from '../scripts/main.js'; // استيراد قاعدة البيانات من Firebase
+  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+  // تسجيل الدخول
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // منع التحديث الافتراضي للصفحة
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-      if (!username || !password) {
-        alert('يرجى ملء جميع الحقول');
-        return;
-      }
+    if (!username || !password) {
+      alert('يرجى ملء جميع الحقول');
+      return;
+    }
 
-      if (users[username] && users[username].password === password) {
-        alert(`welcome back ${username}!`);
-        localStorage.setItem('activeUser', username);
-        window.location.href = 'points.html';
+    try {
+      // جلب بيانات المستخدم من Firestore
+      const userDocRef = doc(db, 'users', username);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists() && userDoc.data().password === password) {
+        alert(`مرحبًا بعودتك ${username}!`);
+        localStorage.setItem('activeUser', username); // تخزين المستخدم النشط محليًا
+        window.location.href = 'points.html'; // الانتقال إلى صفحة النقاط
       } else {
         alert('اسم المستخدم أو كلمة المرور غير صحيحة');
       }
-    });
+    } catch (error) {
+      console.error('خطأ أثناء تسجيل الدخول:', error);
+      alert('حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.');
+    }
+  });
 
-    document.getElementById('whiteButton').addEventListener('click', function () {
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value.trim();
+  // إنشاء حساب جديد
+  document.getElementById('whiteButton').addEventListener('click', async function () {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-      if (!username || !password) {
-        alert('يرجى ملء جميع الحقول لإنشاء الحساب');
-        return;
-      }
+    if (!username || !password) {
+      alert('يرجى ملء جميع الحقول لإنشاء الحساب');
+      return;
+    }
 
-      if (users[username]) {
+    try {
+      // تحقق من إذا كان اسم المستخدم موجودًا
+      const userDocRef = doc(db, 'users', username);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
         alert('اسم المستخدم موجود بالفعل');
         return;
       }
 
-      users[username] = { password, points: 0 };
-      localStorage.setItem('users', JSON.stringify(users));
+      // إنشاء الحساب وإضافته إلى Firestore
+      await setDoc(userDocRef, { password, points: 0 });
       alert(`تم إنشاء الحساب بنجاح! مرحبًا ${username}.`);
-    });
-    
-  </script>
+    } catch (error) {
+      console.error('خطأ أثناء إنشاء الحساب:', error);
+      alert('حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.');
+    }
+  });
+</script>
 </body>
-
-</html>
+</html> 

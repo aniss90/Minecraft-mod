@@ -49,6 +49,7 @@
 
 
   </style>
+    <script type="module" src="../scripts/main.js"></script>
 </head>
 <body>
   <div class="header"> 
@@ -92,62 +93,93 @@
     
   </div>
 
-  <script>
-    const activeUser = localStorage.getItem('activeUser');
-    const users = JSON.parse(localStorage.getItem('users')) || {};
+<script type="module">
+  import { db } from '../scripts/main.js'; // استيراد Firestore
+  import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
 
-    if (!activeUser || !users[activeUser]) {
-      alert('  please login ferst!');
-      window.location.href = 'login.html';
+  const activeUser = localStorage.getItem('activeUser');
+
+  if (!activeUser) {
+    alert('يرجى تسجيل الدخول أولاً!');
+    window.location.href = 'login.html';
+  }
+
+  // جلب بيانات المستخدم من Firestore
+  async function getUserData() {
+    const userDocRef = doc(db, 'users', activeUser);
+    const userDoc = await getDoc(userDocRef);
+    
+    if (userDoc.exists()) {
+      const user = userDoc.data();
+      document.getElementById('welcomeMessage').innerText = `مرحبًا ${activeUser}!`;
+      document.getElementById('points').innerText = user.points;
     } else {
-      const user = users[activeUser];
-      document.getElementById('welcomeMessage').innerText = `HELLO ${activeUser}!`;
+      alert('المستخدم غير موجود في قاعدة البيانات');
+      window.location.href = 'login.html';
+    }
+  }
+
+  getUserData();
+
+  // إضافة النقاط للمستخدم
+  document.getElementById('greenButton').addEventListener('click', async function () {
+    const userDocRef = doc(db, 'users', activeUser);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const user = userDoc.data();
+      user.points++;
+      await updateDoc(userDocRef, { points: user.points });
       document.getElementById('points').innerText = user.points;
     }
+  });
 
-    document.getElementById('greenButton').addEventListener('click', function () {
-      users[activeUser].points++;
-      localStorage.setItem('users', JSON.stringify(users));
-      document.getElementById('points').innerText = users[activeUser].points;
-    });
+  // تسجيل الخروج
+  document.getElementById('redButton').addEventListener('click', function () {
+    localStorage.removeItem('activeUser');
+    window.location.href = 'login.html';
+  });
+
+  // عرض نقاط المستخدمين الآخرين
+  document.getElementById('viewOthersPoints').addEventListener('click', async function () {
+    const usersSnapshot = await getDocs(collection(db, 'users')); // تأكد من استيراد getDocs بشكل صحيح
+    const othersPointsHtml = usersSnapshot.docs
+      .filter(doc => doc.id !== activeUser)
+      .map(doc => `<p>${doc.id}: ${doc.data().points} coins</p>`)
+      .join('');
     
-    document.getElementById('redButton').addEventListener('click', function () {
-      localStorage.removeItem('activeUser');
-      window.location.href = 'login.html';
-    });
-    
-    document.getElementById('viewOthersPoints').addEventListener('click', function () {
-  const users = JSON.parse(localStorage.getItem('users'));
-  const othersPointsHtml = Object.keys(users).filter(username => username !== activeUser).map(username => {
-    return `<p>${username}: ${users[username].points} coins</p>`;
-  }).join('');
-  document.getElementById('othersPoints').innerHTML = othersPointsHtml;
-}); 
+    document.getElementById('othersPoints').innerHTML = othersPointsHtml;
+  });
 
-document.getElementById('whiteButton').addEventListener('click', function () {
-  const sender = activeUser;
-  const receiver = document.getElementById('receiverUsername').value.trim();
-  const points = parseInt(document.getElementById('sendPointsAmount').value);
+  // إرسال النقاط لمستخدم آخر
+  document.getElementById('whiteButton').addEventListener('click', async function () {
+    const sender = activeUser;
+    const receiver = document.getElementById('receiverUsername').value.trim();
+    const points = parseInt(document.getElementById('sendPointsAmount').value);
 
-  const users = JSON.parse(localStorage.getItem('users'));
+    const userDocRef = doc(db, 'users', sender);
+    const receiverDocRef = doc(db, 'users', receiver);
 
-  if (!receiver || !users[receiver]) {
-    document.getElementById('sendPointsResult').innerText = 'User not found !';
-    return;
-  }
+    const senderDoc = await getDoc(userDocRef);
+    const receiverDoc = await getDoc(receiverDocRef);
 
-  if (points <= 0 || users[sender].points < points) {
-    document.getElementById('sendPointsResult').innerText = 'عدد النقاط غير كافٍ!';
-    return;
-  }
+    if (!receiver || !receiverDoc.exists()) {
+      document.getElementById('sendPointsResult').innerText = 'المستخدم غير موجود!';
+      return;
+    }
 
-  users[sender].points -= points;
-  users[receiver].points = (users[receiver].points || 0) + points;
+    if (points <= 0 || senderDoc.data().points < points) {
+      document.getElementById('sendPointsResult').innerText = 'عدد النقاط غير كافٍ!';
+      return;
+    }
 
-  localStorage.setItem('users', JSON.stringify(users));
-  document.getElementById('points').innerText = users[sender].points;
-  document.getElementById('sendPointsResult').innerText = 'تم إرسال النقاط بنجاح!';
-});
-  </script>
+    // تقليص النقاط من المرسل وزيادتها في حساب المستقبل
+    await updateDoc(userDocRef, { points: senderDoc.data().points - points });
+    await updateDoc(receiverDocRef, { points: (receiverDoc.data().points || 0) + points });
+
+    document.getElementById('points').innerText = senderDoc.data().points - points;
+    document.getElementById('sendPointsResult').innerText = 'تم إرسال النقاط بنجاح!';
+  });
+</script>
 </body>
 </html>
