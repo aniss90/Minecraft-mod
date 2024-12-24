@@ -210,7 +210,7 @@ a.link:hover {
   font-family: minecraft-five; 
   font-style: 10px; 
   background-color: #303233; 
-  border: 2px solid #1e1e1f;
+  border: 2px solid #1E1E1F;
   border-bottom: 2px solid #242424;
   display: block;
   margin: auto; 
@@ -227,6 +227,15 @@ a.link:hover {
   background: #1e1e1f;
   text-align: center;
   color: #FFFFFF;
+  filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  transition: filter 0.5s, transform 0.3s;
+    
+  } 
+  .login-box input:hover {
+  filter: blur(0);
+  transform: scale(1.05);
   }
   .Pay input {
   width: 50%;
@@ -234,9 +243,13 @@ a.link:hover {
   margin: auto;
   border: 2px solid #303233;
   box-shadow: 0px 3px 0px rgba(60, 60, 60, 1); 
-  background: #1e1e1f;
+  background: #1E1E1F;
   text-align: center;
   color: #FFFFFF;
+  }
+  .input-container {
+  display: flex;
+    
   }
   
 
@@ -345,7 +358,6 @@ a.link:hover {
    width: 35px; 
    top: 2px; 
    background-color: #14520D; 
-   position:relative; 
  }  
 
 #loginbutton{
@@ -384,4 +396,16 @@ color: #FFFFFF;
 #othersPoints {
   margin-top: 20px; 
   color: #FFFFFF; /* اللون الأبيض */
+}
+#message-input {
+  flex: 1;
+  padding: 15px;
+  outline: none;
+  background-color: #1E1E1F; 
+  border: 3px solid #303233;
+  box-shadow: 0px 3px 0px rgba(60, 60, 60, 1);
+  color: #FFFFFF;
+  background: #1e1e1f;
+  margin: auto;
+  
 }
