@@ -1,114 +1,180 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-     <link rel="stylesheet" href="../style/main.css">
-    <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
-    
-    <style>
-        @font-face {
-            font-family: minecraft;
-            src: url('../font/Minecraft-Default.otf');
-        }
-        @font-face {
-            font-family: minecraft-ten;
-            src: url('../font/Minecraft-Ten.ttf');
-        }
-        @font-face {
-            font-family: minecraft-five;
-            src: url('../font/Minecraft-Five.ttf');
-        }
-          } 
-        }
-    </style>
-    <title>login page</title>
+  <link rel="stylesheet" href="../style/main.css">
+  <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
+  
+  <style>
+    @font-face {
+      font-family: minecraft;
+      src: url('../font/Minecraft-Default.otf');
+    }
+    @font-face {
+      font-family: minecraft-ten;
+      src: url('../font/Minecraft-Ten.ttf');
+    }
+    @font-face {
+      font-family: minecraft-five;
+      src: url('../font/Minecraft-Five.ttf');
+    }
+
+    /* التنبيهات المخصصة */
+    .custom-alert {
+  display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-190%);
+      padding: 20px;
+      border-radius: 5px;
+      color: white;
+      text-align: center;
+      z-index: 9999;
+      min-width: 20px;
+      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.4); 
+    }
+        .custom-alert.success {
+      background-color: rgba(0, 255, 58, 0.54); /* الأخضر */
+    }
+    .custom-alert.error {
+      background-color: rgba(255, 0, 24, 0.48); /* الأحمر */
+    }
+
+    .custom-alert button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+
+  <title>login page</title>
 </head>
 <body>
   <div class="header"> Login <img src="../imag/gif_test-83efe.gif" height="30">
-  <div class="description">
+  <div class="description"> 
   <div class="login-box">
     <form id="loginForm">
-    <br>
-      <input type="text" id="username" placeholder="username " required>
-     </br>  
-     <br>
-      <input type="password" id="password" placeholder="password" required>
-    </br> 
+      <br>
+      <input type="text" id="username" placeholder="Username " required>
+      </br>  
+      <br>
+      <input type="password" id="password" placeholder="Password" required>
+      </br> 
       <div class="description">
         <div class="button"> 
-      <button type="submit" id="greenButton"> Login <img src="../imag/enter-icon-31b5a.png"h height="15"></button></div> 
+          <button type="submit" id="greenButton"> Login <img src="../imag/enter-icon-31b5a.png" height="15"></button>
+        </div> 
       </div> 
       <div> 
-      <div class="description">
-        <div class="button"> 
-      <button type="button" id="whiteButton"> Sign in</button></div> 
-      </div> 
-     <img src="../imag/parental-online-safety-8fad2.png">
+        <div class="description">
+          <div class="button"> 
+            <button type="button" id="whiteButton"> Sign in <img src="../imag/add-player@0.5x.icon-2f437.png" height="15"></button>
+          </div> 
+        </div>
+      </div>
+      <img src="../imag/empty-592da.png" height="150">
     </form>
   </div>
-<script type="module">
-  import { db } from '../scripts/main.js'; // استيراد قاعدة البيانات من Firebase
-  import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
 
-  // تسجيل الدخول
-  document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); // منع التحديث الافتراضي للصفحة
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+  <script type="module">
+    import { db } from '../scripts/main.js'; // استيراد قاعدة البيانات من Firebase
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
 
-    if (!username || !password) {
-      alert('يرجى ملء جميع الحقول');
-      return;
+    // دالة لعرض التنبيه المخصص
+    function showAlert(message, type) {
+      const alertBox = document.createElement('div');
+      alertBox.classList.add('custom-alert');
+      alertBox.classList.add(type); // إما success أو error
+      alertBox.innerHTML = `${message}<br><button onclick="closeAlert(this)">موافق</button>`;
+      document.body.appendChild(alertBox);
+
+      // عرض التنبيه لمدة 3 ثواني ثم إخفاءه
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+        document.body.removeChild(alertBox);
+      }, 3000);
+
+      alertBox.style.display = 'block';
     }
 
-    try {
-      // جلب بيانات المستخدم من Firestore
-      const userDocRef = doc(db, 'users', username);
-      const userDoc = await getDoc(userDocRef);
-
-      if (userDoc.exists() && userDoc.data().password === password) {
-        alert(`مرحبًا بعودتك ${username}!`);
-        localStorage.setItem('activeUser', username); // تخزين المستخدم النشط محليًا
-        window.location.href = 'points.html'; // الانتقال إلى صفحة النقاط
-      } else {
-        alert('اسم المستخدم أو كلمة المرور غير صحيحة');
-      }
-    } catch (error) {
-      console.error('خطأ أثناء تسجيل الدخول:', error);
-      alert('حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.');
-    }
-  });
-
-  // إنشاء حساب جديد
-  document.getElementById('whiteButton').addEventListener('click', async function () {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (!username || !password) {
-      alert('يرجى ملء جميع الحقول لإنشاء الحساب');
-      return;
+    // دالة لإغلاق التنبيه
+    function closeAlert(button) {
+      const alertBox = button.parentElement;
+      alertBox.style.display = 'none';
+      document.body.removeChild(alertBox);
     }
 
-    try {
-      // تحقق من إذا كان اسم المستخدم موجودًا
-      const userDocRef = doc(db, 'users', username);
-      const userDoc = await getDoc(userDocRef);
+    // تسجيل الدخول
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault(); // منع التحديث الافتراضي للصفحة
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-      if (userDoc.exists()) {
-        alert('اسم المستخدم موجود بالفعل');
+      if (!username || !password) {
+        showAlert('Please fill out all fields', 'error');
         return;
       }
 
-      // إنشاء الحساب وإضافته إلى Firestore
-      await setDoc(userDocRef, { password, points: 0 });
-      alert(`تم إنشاء الحساب بنجاح! مرحبًا ${username}.`);
-    } catch (error) {
-      console.error('خطأ أثناء إنشاء الحساب:', error);
-      alert('حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.');
+      try {
+        // جلب بيانات المستخدم من Firestore
+        const userDocRef = doc(db, 'users', username);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists() && userDoc.data().password === password) {
+          showAlert(`Welcome back ${username}!`, 'success');
+          localStorage.setItem('activeUser', username); // تخزين المستخدم النشط محليًا
+          window.location.href = 'points.html'; // الانتقال إلى صفحة النقاط
+        } else {
+          showAlert('Invalid username or password!', 'error');
+        }
+      } catch (error) {
+        console.error(' An error occurred while logging in:', error);
+        showAlert('An error occurred while logging in, try again please.', 'error');
+      }
+    });
+
+    // إنشاء حساب جديد
+    document.getElementById('whiteButton').addEventListener('click', async function () {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        showAlert('Please fill out all fields to create the account', 'error');
+        return;
+      }
+
+      try {
+        // تحقق من إذا كان اسم المستخدم موجودًا
+        const userDocRef = doc(db, 'users', username);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          showAlert('Username already exists', 'error');
+          return;
+        }
+
+        // إنشاء الحساب وإضافته إلى Firestore
+        await setDoc(userDocRef, { password, points: 0 });
+        showAlert(`The account has been created successfully, welcome ${username}.`, 'success');
+      } catch (error) {
+        console.error('Error while creating the account:', error);
+        showAlert('An error occurred while creating the account. Try again.', 'error');
+      }
+    });
+  </script> 
+
+  <script>
+    function openWebsite(url) {
+      window.open(url, "_blank");
     }
-  });
-</script>
+  </script>
+  <script src="scripts/main.js"></script> 
 </body>
-</html> 
+</html>

@@ -3,183 +3,247 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <link rel="stylesheet" href="../style/main.css">
-    <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
-    
-    <style>
-        @font-face {
-            font-family: minecraft;
-            src: url('../font/Minecraft-Default.otf');
-        }
-        @font-face {
-            font-family: minecraft-ten;
-            src: url('../font/Minecraft-Ten.ttf');
-        }
-        @font-face {
-            font-family: minecraft-five;
-            src: url('../font/Minecraft-Five.ttf');
-        }
-          } 
-        }
-    </style>
-  <title>صفحة النقاط</title>
+  <link rel="stylesheet" href="../style/main.css">
+  <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
+  
   <style>
-    .points-box .points img {
-      height: 50px;
-      margin-left: 15px;
+    @font-face {
+      font-family: minecraft;
+      src: url('../font/Minecraft-Default.otf');
     }
-    #points{
+    @font-face {
+      font-family: minecraft-ten;
+      src: url('../font/Minecraft-Ten.ttf');
+    }
+    @font-face {
+      font-family: minecraft-five;
+      src: url('../font/Minecraft-Five.ttf');
+    }
+
+    /* التنبيهات المخصصة */
+    .custom-alert {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      border-radius: 5px;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      z-index: 9999;
+      min-width: 200px;
+      backdrop-filter: blur(5px); /* تأثير التشويش */
+      background-color: rgba(0, 0, 0, 0.4); /* خلفية شبه شفافة */
+    }
+    .custom-alert.success {
+      background-color: rgba(40, 167, 69, 0.8); /* الأخضر */
+    }
+    .custom-alert.error {
+      background-color: rgba(220, 53, 69, 0.8); /* الأحمر */
+    }
+    .custom-alert button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    #points {
       color: #FFBC13; 
       font-size: 15px; 
-    }  
-    #welcomeMessage{
+    }
+
+    #welcomeMessage {
       color: #FFFFFF; 
       font-size: 15px; 
       font-family: minecraft-five; 
-    } 
+    }
+
     #othersPoints {
-  margin-top: 20px; 
-  color:#FFFFFF;
-    } 
+      margin-top: 20px; 
+      color: #FFFFFF;
+    }
+
     #sendPointsResult {
-  margin-top: 10px;
-  color: #008000; /* أخضر لتحديد النجاح */
-  font-weight: bold;
-}
-
-
+      margin-top: 10px;
+      color: #008000; /* أخضر لتحديد النجاح */
+      font-weight: bold;
+    }
   </style>
-    <script type="module" src="../scripts/main.js"></script>
+  
+  <script type="module" src="../scripts/main.js"></script>
+  <title>صفحة النقاط</title>
 </head>
 <body>
   <div class="header"> 
-  My coins 
-  <div class="description">
-   <h1 id="welcomeMessage"></h1>
-          <div class="points">
-    <div class="title"> my coins : <span id="points">0</span><img src="../imag/MCoin.png" alt="عملة" height="15">
-    <div> 
-<div class="description"> 
-    <button id="greenButton"> Get coins <img src="../imag/purtle.png" height="15"></button>
-    </div> 
-<div class="description">  
-<div class="title"> Pay coins 
-<div> 
-<div class="button">
-    <button id="whiteButton">Send <img src="../imag/promo_holiday_gift_small.png" height="15"> </button>
-    </div> 
-    <div class="Pay">
-    <br>
-  <input type="text" id="receiverUsername" name="username" placeholder="username " required></br> 
-  <br>
-  <input type="number" id="sendPointsAmount" name="points" placeholder="coins" required>
-  </br>
-</div> 
-  <div id="sendPointsResult">
-</div> 
-<div  class="description">
-  <div class="title"> User coins
-  </div> see how much have other users coins.
-  <div class="button"> 
-<button id="viewOthersPoints">Show <img src="../imag/friends@0.5x.icon-23e24.png"</button></div> 
-<div class="show"> 
-<div  id="othersPoints"></div>
-</div> 
-<hr>
-<div class="description"> 
-    <button id="redButton"> Sign out</button>
-<hr>
-    </div> 
-    
+    My coins 
+    <div class="description">
+      <h1 id="welcomeMessage"></h1>
+      <div class="points">
+        <div class="title"> my coins : <span id="points">0</span><img src="../imag/MCoin.png" alt="عملة" height="15"></div> 
+        <div class="description"> 
+          <button id="greenButton"> Get coins <img src="../imag/purtle.png" height="15"></button>
+        </div> 
+        <div class="description">
+          <div class="title">taking chat</div>Chat for talking with other users.
+          <a href="chat.html">
+            <div class="button">
+              <button id="greenButton">Dev.Chat page <img src="../imag/comments_light-88de7.png" height="15"></button>
+            </div>
+          </a>
+        </div>
+        <div class="description">  
+          <div class="title"> Pay coins 
+          </div> 
+          <div> 
+            <div class="button">
+              <button id="whiteButton">Send <img src="../imag/promo_holiday_gift_small.png" height="15"> </button>
+            </div> 
+            <div class="Pay">
+              <br>
+              <input type="text" id="receiverUsername" name="username" placeholder="username " required><br> 
+              <br>
+              <input type="number" id="sendPointsAmount" name="points" placeholder="coins" required>
+              </br>
+            </div> 
+            <div id="sendPointsResult"></div> 
+          </div> 
+          <div class="description">
+            <div class="title"> User coins
+            </div> see how much have other users coins.
+            <div class="button"> 
+              <button id="viewOthersPoints">Show <img src="../imag/friends@0.5x.icon-23e24.png" height="15"></button>
+            </div>
+            <div class="show"> 
+              <div id="othersPoints"></div>
+            </div> 
+          </div>
+          <hr>
+          <div class="description"> 
+            <button id="redButton"> Sign out <img src="../imag/Exit-dd8fc.png" height="15"></button>
+            <hr>
+          </div> 
+        </div>
+      </div>
+    </div>
   </div>
 
-<script type="module">
-  import { db } from '../scripts/main.js'; // استيراد Firestore
-  import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
+  <script type="module">
+    import { db } from '../scripts/main.js'; 
+    import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"; 
 
-  const activeUser = localStorage.getItem('activeUser');
+    const activeUser = localStorage.getItem('activeUser');
 
-  if (!activeUser) {
-    alert('يرجى تسجيل الدخول أولاً!');
-    window.location.href = 'login.html';
-  }
-
-  // جلب بيانات المستخدم من Firestore
-  async function getUserData() {
-    const userDocRef = doc(db, 'users', activeUser);
-    const userDoc = await getDoc(userDocRef);
-    
-    if (userDoc.exists()) {
-      const user = userDoc.data();
-      document.getElementById('welcomeMessage').innerText = `مرحبًا ${activeUser}!`;
-      document.getElementById('points').innerText = user.points;
-    } else {
-      alert('المستخدم غير موجود في قاعدة البيانات');
+    if (!activeUser) {
+      showAlert('Please log in first!', 'error');
       window.location.href = 'login.html';
     }
-  }
 
-  getUserData();
+    // دالة لعرض التنبيه المخصص
+    function showAlert(message, type) {
+      const alertBox = document.createElement('div');
+      alertBox.classList.add('custom-alert');
+      alertBox.classList.add(type); // إما success أو error
+      alertBox.innerHTML = `${message}<br><button onclick="closeAlert(this)">موافق</button>`;
+      document.body.appendChild(alertBox);
 
-  // إضافة النقاط للمستخدم
-  document.getElementById('greenButton').addEventListener('click', async function () {
-    const userDocRef = doc(db, 'users', activeUser);
-    const userDoc = await getDoc(userDocRef);
+      setTimeout(() => {
+        alertBox.style.display = 'none';
+        document.body.removeChild(alertBox);
+      }, 3000);
 
-    if (userDoc.exists()) {
-      const user = userDoc.data();
-      user.points++;
-      await updateDoc(userDocRef, { points: user.points });
-      document.getElementById('points').innerText = user.points;
-    }
-  });
-
-  // تسجيل الخروج
-  document.getElementById('redButton').addEventListener('click', function () {
-    localStorage.removeItem('activeUser');
-    window.location.href = 'login.html';
-  });
-
-  // عرض نقاط المستخدمين الآخرين
-  document.getElementById('viewOthersPoints').addEventListener('click', async function () {
-    const usersSnapshot = await getDocs(collection(db, 'users')); // تأكد من استيراد getDocs بشكل صحيح
-    const othersPointsHtml = usersSnapshot.docs
-      .filter(doc => doc.id !== activeUser)
-      .map(doc => `<p>${doc.id}: ${doc.data().points} coins</p>`)
-      .join('');
-    
-    document.getElementById('othersPoints').innerHTML = othersPointsHtml;
-  });
-
-  // إرسال النقاط لمستخدم آخر
-  document.getElementById('whiteButton').addEventListener('click', async function () {
-    const sender = activeUser;
-    const receiver = document.getElementById('receiverUsername').value.trim();
-    const points = parseInt(document.getElementById('sendPointsAmount').value);
-
-    const userDocRef = doc(db, 'users', sender);
-    const receiverDocRef = doc(db, 'users', receiver);
-
-    const senderDoc = await getDoc(userDocRef);
-    const receiverDoc = await getDoc(receiverDocRef);
-
-    if (!receiver || !receiverDoc.exists()) {
-      document.getElementById('sendPointsResult').innerText = 'المستخدم غير موجود!';
-      return;
+      alertBox.style.display = 'block';
     }
 
-    if (points <= 0 || senderDoc.data().points < points) {
-      document.getElementById('sendPointsResult').innerText = 'عدد النقاط غير كافٍ!';
-      return;
+    // دالة لإغلاق التنبيه
+    function closeAlert(button) {
+      const alertBox = button.parentElement;
+      alertBox.style.display = 'none';
+      document.body.removeChild(alertBox);
     }
 
-    // تقليص النقاط من المرسل وزيادتها في حساب المستقبل
-    await updateDoc(userDocRef, { points: senderDoc.data().points - points });
-    await updateDoc(receiverDocRef, { points: (receiverDoc.data().points || 0) + points });
+    // جلب بيانات المستخدم من Firestore
+    async function getUserData() {
+      const userDocRef = doc(db, 'users', activeUser);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (userDoc.exists()) {
+        const user = userDoc.data();
+        document.getElementById('welcomeMessage').innerText = `Welcome ${activeUser}!`;
+        document.getElementById('points').innerText = user.points;
+      } else {
+        showAlert('User does not exist in the database!', 'error');
+        window.location.href = 'login.html';
+      }
+    }
 
-    document.getElementById('points').innerText = senderDoc.data().points - points;
-    document.getElementById('sendPointsResult').innerText = 'تم إرسال النقاط بنجاح!';
-  });
-</script>
+    getUserData();
+
+    // إضافة النقاط للمستخدم
+    document.getElementById('greenButton').addEventListener('click', async function () {
+      const userDocRef = doc(db, 'users', activeUser);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const user = userDoc.data();
+        user.points++;
+        await updateDoc(userDocRef, { points: user.points });
+        document.getElementById('points').innerText = user.points;
+        showAlert('Coin added successfully!', 'success');
+      }
+    });
+
+    // تسجيل الخروج
+    document.getElementById('redButton').addEventListener('click', function () {
+      localStorage.removeItem('activeUser');
+      window.location.href = 'login.html';
+    });
+
+    // عرض نقاط المستخدمين الآخرين
+    document.getElementById('viewOthersPoints').addEventListener('click', async function () {
+      const usersSnapshot = await getDocs(collection(db, 'users'));
+      const othersPointsHtml = usersSnapshot.docs
+        .filter(doc => doc.id !== activeUser)
+        .map(doc => `<p>${doc.id}: ${doc.data().points} coins</p>`)
+        .join('');
+      
+      document.getElementById('othersPoints').innerHTML = othersPointsHtml;
+    });
+
+    // إرسال النقاط لمستخدم آخر
+    document.getElementById('whiteButton').addEventListener('click', async function () {
+      const sender = activeUser;
+      const receiver = document.getElementById('receiverUsername').value.trim();
+      const points = parseInt(document.getElementById('sendPointsAmount').value);
+
+      const userDocRef = doc(db, 'users', sender);
+      const receiverDocRef = doc(db, 'users', receiver);
+
+      const senderDoc = await getDoc(userDocRef);
+      const receiverDoc = await getDoc(receiverDocRef);
+
+      if (!receiver || !receiverDoc.exists()) {
+        showAlert('User not found!', 'error');
+        return;
+      }
+
+      if (points <= 0 || senderDoc.data().points < points) {
+        showAlert('Not enough coins!', 'error');
+        return;
+      }
+
+      // تقليص النقاط من المرسل وزيادتها في حساب المستقبل
+      await updateDoc(userDocRef, { points: senderDoc.data().points - points });
+      await updateDoc(receiverDocRef, { points: (receiverDoc.data().points || 0) + points });
+
+      document.getElementById('points').innerText = senderDoc.data().points - points;
+      showAlert('Coins sent successfully!', 'success');
+    });
+  </script>
 </body>
 </html>

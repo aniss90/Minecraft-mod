@@ -19,6 +19,17 @@
             font-family: minecraft-five;
             src: url('../font/Minecraft-Five.ttf');
         }
+    .zoom-blur {
+      filter: blur(4px);
+      transition: filter 0.3s, transform 0.3s;
+      border-radius: 10px;
+    }
+
+    .zoom-blur:hover {
+      filter: blur(0);
+      transform: scale(1.1);
+      top: 9px; 
+    } 
     </style>
   <title>minecraft pictures</title>
 </head>
@@ -33,7 +44,7 @@
   <input class="search" type="text" placeholder="search">
 </div>
 <div>
-  <div class="borderpic">
+  <div class="zoom-blur">
   <img src="../imag/gameInviteDefaultImage-60630.png" height="250">
 </div>
     <script src="scripts/main.js"></script> 

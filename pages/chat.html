@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>chat page </title>
+  <link rel="stylesheet" href="../style/main.css">
+  <link rel="icon" type="image/x-icon" href="../web/ytlogo.png">
+  <style>
+    @font-face {
+        font-family: minecraft;
+        src: url('../font/Minecraft-Default.otf');
+    }
+    @font-face {
+        font-family: minecraft-ten;
+        src: url('../font/Minecraft-Ten.ttf');
+    }
+    @font-face {
+        font-family: minecraft-five;
+        src: url('../font/Minecraft-Five.ttf');
+    }
+    body {
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      
+    }
+
+    #chat-box {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message.self {
+      align-self: flex-end;
+    background-color: #2C8014;
+      border: 2px solid #4f913c;
+  box-shadow: 0px 3px 0px #1d4d13;
+  font-size: 16px;
+      color: white;
+      
+    }
+
+    .chat-message.other {
+      align-self: flex-start;
+  border: 2px solid #3D3D3D;
+  border: 2px solid #DCDCDC;
+  background-color: #FFFFFF;
+  box-shadow: 0px 3px 0px rgba(111, 111, 111, 1);
+  font-size: 16px;
+      color: white;
+    }
+
+    .message {
+      margin-top: 5px;
+    }
+  
+
+
+    #send-btn, #upload-btn {
+      padding: 15px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-color: #2C8014;
+      color: #FFFFFF;
+      border: 2px solid #4f913c;
+      box-shadow: 0px 3px 0px #1d4d13;
+      font-size: 16px;
+      display: inline-block;
+      margin:auto;
+    }
+
+    #send-btn:hover, #upload-btn:hover {
+      background-color: #45a049;
+    }
+
+  #chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1; /* ضع الزر في أعلى من الرسائل */
+}
+
+.users-button {
+  position: absolute;
+  top: 10px;
+  right: 8px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10; /* قيمة أعلى لكي يظهر فوق الرسائل */
+  background-color: #2C8014;
+  color: #FFFFFF;
+  border: 2px solid #4f913c;
+  box-shadow: 0px 3px 0px #1d4d13;
+  font-size: 16px;
+  display: inline-block;
+  position: relative;
+  bottom: 0;
+  margin-left: 15px;
+}
+
+
+
+    .users-button:hover {
+      background-color: #45a049;
+    }
+
+    .users-popup {
+      top: 20px; 
+      margin: auto; 
+      width: 200px;
+      max-height: 300px;
+      overflow-y: auto;
+      background-color: #303233;
+      border: 2px solid #1E1E1F;
+      border-bottom: 2px solid #242424;
+      padding: 10px;
+      display: none;
+      z-index: 100;
+      color: #FFFFFF; 
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .user-status {
+  width: 16px; /* يمكنك تعديل الحجم */
+  height: 16px;
+  background-size: cover;
+  margin-right: 10px;
+}
+
+.user-status.online {
+  background-image: url('../imag/player-online-icon-b63b8.png'); /* مسار أيقونة الحالة Online */
+}
+
+.user-status.offline {
+  background-image: url('../imag/player-offline-icon-b63b8.png'); /* مسار أيقونة الحالة Offline */
+} 
+
+    .logout-btn {
+      width: 100%;
+      padding: 10px;
+      cursor: pointer;
+      text-shadow: 1px 1px 0.9px #000000;
+      border: 2px solid #4B0000;
+      border: 2px solid #8E2727;
+      background-color: #FF3838;
+      box-shadow: 0px 3px 0px rgba(59, 11, 15, 1);
+      font-size: 16px;
+      position: relative;
+      display: inline-block;
+      color: #FFFFFF;
+      margin: auto;
+    }
+
+    .logout-btn:hover {
+      background-color: darkred;
+    }
+    /* تصميم الرسائل */
+
+
+.message {
+  margin-top: 5px;
+  word-wrap: break-word; /* ضمان أن النص لن يتجاوز */
+  word-break: break-word; /* أيضًا تكسر الكلمات عند الحاجة */
+}
+
+.chat-message .username {
+  font-weight: bold;
+  color: #000000;
+}
+.chat-message {
+  margin-bottom: 10px;
+  max-width: 70%;
+  padding: 10px;
+  position: relative;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  margin-top: 10px; 
+}
+
+.chat-message .message-text {
+  user-select: text; /* تمكين تحديد النص */
+  cursor: text; /* تغيير المؤشر ليظهر أن النص قابل للتحديد */
+}
+
+.chat-message img, .chat-message .time, .chat-message .username {
+  pointer-events: none; /* تعطيل التفاعل مع الصورة أو الوقت أو اسم المستخدم */
+}
+
+.time {
+  font-size: 12px;
+  color: #B0B0B0;
+  margin-bottom: 5px; /* إضافة مسافة صغيرة بين الوقت والرسالة */
+  display: block; /* لجعل الوقت يظهر في سطر منفصل */
+  text-align: right; /* جعل الوقت يظهر في الجهة اليمنى */
+} 
+ 
+.input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0px;
+  background-color: #303233; /* يمكنك تغيير اللون حسب التصميم */
+  z-index: 10; /* تأكد أن الأزرار تظهر فوق الرسائل */
+  display: flex;
+  flex: 1;
+}
+
+#chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 60px; /* ترك مساحة في الأسفل للأزرار */
+}
+/* تصميم قائمة الخيارات */
+.context-menu {
+  position: absolute;
+  background-color: #303233;
+  color: white;
+  border: 1px solid #1E1E1F;
+  padding: 5px;
+  display: none;
+  z-index: 100;
+}
+
+.context-menu button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.context-menu button:hover {
+  background-color: #2C8014;
+}
+.chat-message img {
+  max-width: 100%;  /* تحديد الحد الأقصى لعرض الصورة */
+  height: auto;     /* الحفاظ على النسبة الأصلية للصورة */
+  border-radius: 5px; /* إذا أردت إضافة تأثير حواف دائرية */
+  box-sizing: border-box; /* التأكد من أن الصورة لن تتجاوز المساحة المحددة */
+}
+
+
+
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <button class="users-button" id="toggle-users"><img src="../imag/friends-47df6.png"></button>
+    <div class="users-popup" id="users-popup">
+      <button id="logout-btn" class="logout-btn">Logout </button>
+    </div>
+    
+
+    <div id="chat-box"></div>
+    <div class="input-container">
+      <input type="text" id="message-input" placeholder="Write something...">
+      <input type="file" id="image-input" style="display: none;">
+      <button id="upload-btn">imag</button>
+      <button id="send-btn">send</button>
+    </div>
+    <!-- قائمة الخيارات المنبثقة -->
+<div class="context-menu" id="context-menu">
+  <button id="delete-message-btn">حذف الرسالة</button>
+</div>
+
+  </div>
+
+  <script type="module">
+  import { db } from '../scripts/main.js';
+  import { collection, addDoc, query, orderBy, onSnapshot, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+  import { signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+  const chatBox = document.getElementById("chat-box");
+  const messageInput = document.getElementById("message-input");
+  const sendButton = document.getElementById("send-btn");
+  const uploadButton = document.getElementById("upload-btn");
+  const imageInput = document.getElementById("image-input");
+  const usersPopup = document.getElementById("users-popup");
+  const toggleUsersButton = document.getElementById("toggle-users");
+  const logoutButton = document.getElementById("logout-btn");
+
+  const activeUser = localStorage.getItem('activeUser');
+  if (!activeUser) {
+    alert('Please log in first!');
+    window.location.href = 'login.html';
+  }
+
+  const userDocRef = doc(db, 'users', activeUser);
+  updateDoc(userDocRef, { online: true });
+
+
+window.addEventListener("beforeunload", async () => {
+  try {
+    const userDocRef = doc(db, "users", activeUser); // معرف المستخدم النشط
+    await updateDoc(userDocRef, {
+      online: false,
+      lastOnline: serverTimestamp() // تعيين الوقت الحالي
+    });
+  } catch (error) {
+    console.error("Error updating lastOnline:", error);
+  }
+});
+
+  sendButton.addEventListener("click", sendMessage);
+  uploadButton.addEventListener("click", () => imageInput.click());
+
+  imageInput.addEventListener("change", async () => {
+    const file = imageInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        await addDoc(collection(db, "messages"), {
+          username: activeUser,
+          image: reader.result,
+          timestamp: new Date()
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // دالة لتحويل النصوص إلى روابط قابلة للنقر
+function linkify(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, (url) => {
+    return `<a href="${url}" target="_blank" class="link">${url}</a>`;
+  });
+}
+
+  async function sendMessage() {
+  const messageText = messageInput.value.trim();
+  if (messageText !== "") {
+    try {
+      const timestamp = new Date(); // الحصول على الوقت الحالي
+      await addDoc(collection(db, "messages"), {
+        username: activeUser,
+        message: messageText,
+        timestamp: timestamp // إضافة الوقت مع الرسالة
+      });
+      messageInput.value = "";
+    } catch (e) {
+      console.error("Error sending message: ", e);
+    }
+  }
+}
+
+  // إضافة متغيرات جديدة
+const contextMenu = document.getElementById('context-menu');
+const deleteMessageBtn = document.getElementById('delete-message-btn');
+
+// عرض القائمة المنبثقة عند الضغط المطول على الرسالة
+function showContextMenu(event, messageId) {
+  event.preventDefault(); // منع ظهور قائمة السياق الافتراضية
+  const x = event.clientX;
+  const y = event.clientY;
+
+  contextMenu.style.left = `${x}px`;
+  contextMenu.style.top = `${y}px`;
+  contextMenu.style.display = 'block';
+
+  // تخزين ID الرسالة التي سيتم حذفها
+  deleteMessageBtn.onclick = () => deleteMessage(messageId);
+}
+
+// إخفاء قائمة السياق عند النقر في أي مكان آخر
+document.addEventListener('click', (event) => {
+  if (!contextMenu.contains(event.target)) {
+    contextMenu.style.display = 'none';
+  }
+});
+
+// دالة لحذف الرسالة
+// دالة لحذف الرسالة
+// دالة لحذف الرسالة
+async function deleteMessage(messageId) {
+  try {
+    // التحقق من أن الرسالة تخص المستخدم النشط
+    const messageDoc = doc(db, "messages", messageId);
+    const messageSnapshot = await getDoc(messageDoc);
+    const messageData = messageSnapshot.data();
+    
+    if (messageData.username !== activeUser) {
+      alert('You can only delete your own messages.');
+      return; // إذا كانت الرسالة ليست للمستخدم النشط، لا تتم عملية الحذف
+    }
+
+    // حذف الرسالة من قاعدة البيانات
+    await deleteDoc(messageDoc);
+    console.log("Message deleted");
+
+    // إخفاء القائمة بعد الحذف
+    contextMenu.style.display = 'none';
+  } catch (error) {
+    console.error("Error deleting message: ", error);
+  }
+}
+
+// إضافة الحدث لعرض القائمة عند الضغط المطول على الرسالة
+function addMessageEvents(messageElement, messageId) {
+  messageElement.addEventListener('contextmenu', (event) => {
+    showContextMenu(event, messageId);
+  });
+}
+
+// عرض الرسائل مع إضافة الحدث لكل رسالة
+function displayMessages(messages) {
+  chatBox.innerHTML = ""; // امسح الرسائل القديمة
+  messages.forEach(doc => {
+    const data = doc.data();
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("chat-message");
+    
+    // التحقق من أن الرسالة هي للمستخدم النشط فقط
+    if (data.username === activeUser) {
+      messageElement.classList.add("self");
+    } else {
+      messageElement.classList.add("other");
+    }
+
+    const timeElement = document.createElement("span");
+    timeElement.classList.add("time");
+    const messageTime = new Date(data.timestamp.seconds * 1000); // تحويل timestamp إلى تاريخ قابل للعرض
+    timeElement.textContent = messageTime.toLocaleTimeString(); // عرض الوقت بتنسيق الساعة:الدقيقة
+
+    const usernameElement = document.createElement("span");
+    usernameElement.classList.add("username");
+    usernameElement.textContent = `${data.username}:`;
+
+    const messageContentElement = document.createElement("span");
+    messageContentElement.classList.add("message");
+
+    if (data.message) {
+      const linkedMessage = linkify(data.message); // تطبيق تحويل الروابط
+      messageContentElement.innerHTML = linkedMessage;
+    } else if (data.image) {
+      messageContentElement.innerHTML = `<br><img src="${data.image}" alt="image">`;
+    }
+
+    messageElement.appendChild(timeElement); // إضافة الوقت أولًا
+    messageElement.appendChild(usernameElement);
+    messageElement.appendChild(messageContentElement);
+    chatBox.appendChild(messageElement);
+
+    // إذا كانت الرسالة خاصة بالمستخدم النشط، إضافة زر الحذف
+    if (data.username === activeUser) {
+      addMessageEvents(messageElement, doc.id);
+    }
+  });
+  
+  // التمرير لأسفل تلقائيًا بعد إضافة الرسائل
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+  const messagesQuery = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+  onSnapshot(messagesQuery, (querySnapshot) => {
+    const messages = [];
+    querySnapshot.forEach(doc => messages.push(doc));
+    displayMessages(messages);
+  });
+
+  function displayUsers(users) {
+  usersPopup.innerHTML = ""; // مسح المحتوى القديم
+
+  users.forEach(user => {
+    const userElement = document.createElement("div");
+    userElement.classList.add("user-item");
+
+    const statusIndicator = document.createElement("div");
+    statusIndicator.classList.add("user-status", user.online ? "online" : "offline");
+
+    const userName = document.createTextNode(user.id);
+
+    const lastSeen = document.createElement("span");
+    if (!user.online && user.lastOnline) {
+      const lastOnlineDate = new Date(user.lastOnline.seconds * 1000); // تحويل timestamp إلى تاريخ
+      const timeDiff = getTimeDiff(lastOnlineDate); // حساب الفرق الزمني
+      lastSeen.textContent = ` (${timeDiff})`;
+    }
+
+    userElement.appendChild(statusIndicator);
+    userElement.appendChild(userName);
+    userElement.appendChild(lastSeen);
+
+    usersPopup.appendChild(userElement);
+  });
+}
+
+// دالة حساب الفرق الزمني
+function getTimeDiff(date) {
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMinutes = Math.floor(diffMs / 60000); // تحويل إلى دقائق
+
+  if (diffMinutes < 60) {
+    return `${diffMinutes} دقيقة مضت`;
+  } else if (diffMinutes < 1440) {
+    const hours = Math.floor(diffMinutes / 60);
+    return `${hours} ساعة مضت`;
+  } else {
+    const days = Math.floor(diffMinutes / 1440);
+    return `${days} يوم مضى`;
+  }
+}
+
+
+
+  const usersQuery = query(collection(db, "users"));
+  onSnapshot(usersQuery, (querySnapshot) => {
+    const users = [];
+    querySnapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+    displayUsers(users);
+  });
+
+  toggleUsersButton.addEventListener("click", () => {
+    usersPopup.style.display = usersPopup.style.display === "block" ? "none" : "block";
+  });
+
+  logoutButton.addEventListener("click", async () => {
+    try {
+      await updateDoc(userDocRef, { online: false });
+      localStorage.removeItem('activeUser');
+      window.location.href = 'login.html';
+    } catch (error) {
+      console.error("Error while logging out: ", error);
+    }
+  });
+// دالة لنسخ النص داخل الرسالة
+function copyMessageText(event) {
+  // التأكد من النقر على النص داخل الرسالة فقط
+  if (event.target.classList.contains('message-text')) {
+    const messageText = event.target.innerText; // الحصول على النص
+    const textArea = document.createElement('textarea');
+    textArea.value = messageText; // وضع النص داخل الـ textarea
+    document.body.appendChild(textArea); // إضافة الـ textarea إلى الـ DOM
+    textArea.select(); // تحديد النص داخل الـ textarea
+    document.execCommand('copy'); // نسخ النص
+    document.body.removeChild(textArea); // إزالة الـ textarea بعد النسخ
+    
+  }
+}
+
+// إضافة الحدث لجميع الرسائل
+chatBox.addEventListener('click', (event) => {
+  copyMessageText(event);
+});
+function calculateTimeDifference(lastOnlineTime) {
+  const now = new Date();
+  const diff = Math.floor((now - lastOnlineTime) / 1000); // الفرق بالثواني
+
+  if (diff < 60) return `${diff} seconds ago`;
+  else if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+  else if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+  else return `${Math.floor(diff / 86400)} days ago`;
+}
+onSnapshot(collection(db, "users"), (snapshot) => {
+  const users = [];
+  snapshot.forEach((doc) => {
+    users.push({ id: doc.id, ...doc.data() }); // جلب البيانات مع `lastOnline`
+  });
+  displayUsers(users); // تحديث الواجهة
+});
+
+</script>
+</body>
+</html>
