@@ -1,4 +1,4 @@
-function openWebsite(url) {
+export function openWebsite(url) {
   window.open(url, "_blank");
 }
 
@@ -8,7 +8,7 @@ function onClick() {
 }
 // تأكد من استيراد Firebase بشكل صحيح
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot,  } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // إعداد Firebase
 const firebaseConfig = {
